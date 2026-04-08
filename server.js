@@ -5,20 +5,7 @@ const app = express();
 app.use(express.json());
 
 // ── CORS ───────────────────────────────────────────────────
-const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || '')
-  .split(',')
-  .map(s => s.trim())
-  .filter(Boolean);
-
-app.use(cors({
-  origin: (origin, cb) => {
-    if (!origin) return cb(null, process.env.NODE_ENV !== 'production');
-    if (ALLOWED_ORIGINS.length === 0 || ALLOWED_ORIGINS.includes(origin)) {
-      return cb(null, true);
-    }
-    cb(new Error(`Origin ${origin} not allowed`));
-  }
-}));
+app.use(cors());
 
 // ── Rate limiting ──────────────────────────────────────────
 const RATE_LIMIT = parseInt(process.env.RATE_LIMIT || '20');
