@@ -8,33 +8,74 @@ app.use(express.json());
 app.use(cors());
 
 // ── Rate limiting ──────────────────────────────────────────
-const RATE_LIMIT = parseInt(process.env.RATE_LIMIT || '20');
-const WINDOW_MS  = parseInt(process.env.WINDOW_MS  || '60000');
-const ipStore    = new Map();
+// Two independent limits applied in sequence:
+//   1. Per-minute burst limit  — stops rapid hammering
+//   2. Per-day limit           — stops sustained bot abuse
+//
+// Both are in-memory. They reset naturally on server restart,
+// which is fine for a demo proxy. If you need persistence across
+// restarts (e.g. Railway redeploys), swap the Maps for Redis.
+//
+// Defaults (override via environment variables):
+//   RATE_LIMIT      = 20   requests per IP per minute
+//   DAILY_LIMIT     = 100  requests per IP per day
+//   WINDOW_MS       = 60000  (1 minute in ms)
+
+const RATE_LIMIT  = parseInt(process.env.RATE_LIMIT  || '20');
+const DAILY_LIMIT = parseInt(process.env.DAILY_LIMIT || '50');
+const WINDOW_MS   = parseInt(process.env.WINDOW_MS   || '60000');
+const DAY_MS      = 24 * 60 * 60 * 1000;
+
+const minuteStore = new Map(); // IP -> { count, windowStart }
+const dailyStore  = new Map(); // IP -> { count, dayStart }
+
+function getIP(req) {
+  return req.headers['x-forwarded-for']?.split(',')[0].trim() || req.socket.remoteAddress;
+}
 
 function rateLimit(req, res, next) {
-  const ip  = req.headers['x-forwarded-for']?.split(',')[0].trim() || req.socket.remoteAddress;
+  const ip  = getIP(req);
   const now = Date.now();
-  const rec = ipStore.get(ip);
-  if (!rec || now - rec.windowStart > WINDOW_MS) {
-    ipStore.set(ip, { count: 1, windowStart: now });
-    return next();
+
+  // ── Per-minute check ──
+  const min = minuteStore.get(ip);
+  if (!min || now - min.windowStart > WINDOW_MS) {
+    minuteStore.set(ip, { count: 1, windowStart: now });
+  } else {
+    min.count++;
+    if (min.count > RATE_LIMIT) {
+      const retryAfter = Math.ceil((min.windowStart + WINDOW_MS - now) / 1000);
+      res.set('Retry-After', retryAfter);
+      return res.status(429).json({ error: `Rate limit exceeded. Try again in ${retryAfter}s.` });
+    }
   }
-  rec.count++;
-  if (rec.count > RATE_LIMIT) {
-    const retryAfter = Math.ceil((rec.windowStart + WINDOW_MS - now) / 1000);
-    res.set('Retry-After', retryAfter);
-    return res.status(429).json({ error: `Rate limit exceeded. Try again in ${retryAfter}s.` });
+
+  // ── Per-day check ──
+  const day = dailyStore.get(ip);
+  if (!day || now - day.dayStart > DAY_MS) {
+    dailyStore.set(ip, { count: 1, dayStart: now });
+  } else {
+    day.count++;
+    if (day.count > DAILY_LIMIT) {
+      const retryAfter = Math.ceil((day.dayStart + DAY_MS - now) / 3600);
+      res.set('Retry-After', retryAfter * 3600);
+      return res.status(429).json({ error: `Daily limit reached. Try again in ${retryAfter} hour(s).` });
+    }
   }
+
   next();
 }
 
+// Clean up stale entries every 10 minutes
 setInterval(() => {
-  const cutoff = Date.now() - WINDOW_MS;
-  for (const [ip, rec] of ipStore) {
-    if (rec.windowStart < cutoff) ipStore.delete(ip);
+  const now = Date.now();
+  for (const [ip, rec] of minuteStore) {
+    if (now - rec.windowStart > WINDOW_MS) minuteStore.delete(ip);
   }
-}, 5 * 60 * 1000);
+  for (const [ip, rec] of dailyStore) {
+    if (now - rec.dayStart > DAY_MS) dailyStore.delete(ip);
+  }
+}, 10 * 60 * 1000);
 
 // ── Secret header check ────────────────────────────────────
 function secretCheck(req, res, next) {
@@ -47,9 +88,6 @@ function secretCheck(req, res, next) {
 }
 
 // ── Hardcoded prompts and data ─────────────────────────────
-// All context lives here on the server. The browser sends nothing
-// meaningful — clicking a button only triggers an endpoint.
-// This proxy cannot be used as a general Claude interface.
 
 const BAD_BASE = `You are an AI analyst assistant for Caldwell Group, a PE-backed managed services company. You have access to the following raw operational data extracted from three legacy systems (Facilities Division, Tech Services Division, and Catering & Support Division). This data has NOT been harmonized — field names, categories, and cost classifications differ across divisions.
 
@@ -100,9 +138,10 @@ Of which: AWS 73.5% | Azure 23.0% | GCP 3.2% | Allocated 3.5%
 Notes: All figures reconciled to finance system cost codes. SaaS licensing separated from IaaS/PaaS. On-premise excluded. Annualised from Q3 actuals where full-year not available.`;
 
 const CHART_INSTRUCTION     = 'Use charts and visuals where possible, and use the [CHART:label|value|max] format for any chart or visual. Do not use markdown tables or ASCII formatting.';
-const CHART_INSTRUCTION_Q2  = 'If producing a chart, use percentage values only. Suitable chart data includes EBITDA margin, customer concentration, or contract renewal exposure by division. Do not chart ratios, leverage multiples, or categorical risk ratings. Use the [CHART:label|value|max] format for any chart or visual. Do not use markdown tables or ASCII formatting.';
-const SHARED_BAD_INSTRUCTION  = `Work only with what is available. Do not comment on data quality, gaps, or limitations. Give the best answer the data supports. Do not offer follow-up options, suggestions, or next steps. End your response after answering the question. ${CHART_INSTRUCTION} Keep response under 200 words.`;
-const SHARED_GOOD_INSTRUCTION = `Do not offer follow-up options, suggestions, or next steps. End your response after answering the question. ${CHART_INSTRUCTION} Keep response under 200 words.`;
+const CHART_INSTRUCTION_Q2  = 'If producing a chart, use percentage values only. Suitable chart data includes EBITDA margin, customer concentration, or contract renewal exposure by division. Do not chart ratios, leverage multiples, or categorical risk ratings. Use the [CHART:label|value|100|%] format for any chart or visual (the % signals percentage display). Do not use markdown tables or ASCII formatting.';
+
+const SHARED_BAD_INSTRUCTION     = `Work only with what is available. Do not comment on data quality, gaps, or limitations. Give the best answer the data supports. Do not offer follow-up options, suggestions, or next steps. End your response after answering the question. ${CHART_INSTRUCTION} Keep response under 200 words.`;
+const SHARED_GOOD_INSTRUCTION    = `Do not offer follow-up options, suggestions, or next steps. End your response after answering the question. ${CHART_INSTRUCTION} Keep response under 200 words.`;
 const SHARED_BAD_INSTRUCTION_Q2  = `Work only with what is available. Do not comment on data quality, gaps, or limitations. Give the best answer the data supports. Do not offer follow-up options, suggestions, or next steps. End your response after answering the question. ${CHART_INSTRUCTION_Q2} Keep response under 200 words.`;
 const SHARED_GOOD_INSTRUCTION_Q2 = `Do not offer follow-up options, suggestions, or next steps. End your response after answering the question. ${CHART_INSTRUCTION_Q2} Keep response under 200 words.`;
 
@@ -211,9 +250,6 @@ async function callClaude(system, user, res) {
 }
 
 // ── Per-question endpoints ─────────────────────────────────
-// Six endpoints total: /api/demo/q1/bad, /api/demo/q1/good, etc.
-// Request body is ignored — prompts are hardcoded above.
-
 for (const [qKey, prompts] of Object.entries(QUESTIONS)) {
   app.post(`/api/demo/${qKey}/bad`,  rateLimit, secretCheck, (_req, res) => callClaude(prompts.bad.system,  prompts.bad.user,  res));
   app.post(`/api/demo/${qKey}/good`, rateLimit, secretCheck, (_req, res) => callClaude(prompts.good.system, prompts.good.user, res));

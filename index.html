@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Data Harmonization — Hypericum</title>
+  <title>Data Harmonization | Hypericum</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Mono:wght@300;400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
@@ -232,6 +232,20 @@
       margin-top: 1.5rem;
       padding-top: 1.5rem;
       border-top: 1px solid var(--warm-grey);
+    }
+    .problem-card-body {
+      font-size: 0.95rem;
+      font-weight: 300;
+      color: var(--text-mid);
+      line-height: 1.75;
+    }
+    .problem-closing {
+      font-size: 0.95rem;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--mid);
+      margin-top: 2rem;
+      line-height: 1.7;
     }
 
     /* Solution grid */
@@ -790,10 +804,314 @@
     }
     @media (max-width: 900px) {
       .demo-section { padding: 4.5rem 2rem; }
+      .demo-questions { padding: 1.2rem 1.2rem 1rem; gap: 0.4rem; }
+      .demo-q-btn { font-size: 0.72rem; padding: 0.45rem 0.75rem; }
       .demo-panels { grid-template-columns: 1fr; }
       .demo-panel { border-right: none; border-bottom: 1px solid var(--warm-grey); }
       .demo-panel:last-child { border-bottom: none; }
       .demo-panel-body { min-height: 280px; }
+    }
+
+    /* Assessment section */
+    .assessment-section { padding: 6rem 4rem; background: var(--off-white); }
+    .assessment-section .section-label { color: var(--mid); }
+
+    .asmt-questions {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      border: 1px solid var(--warm-grey);
+      margin-bottom: 2px;
+    }
+    .asmt-q-row {
+      display: grid;
+      grid-template-columns: 2.4rem 1fr 1fr;
+      gap: 0;
+      border-bottom: 1px solid var(--warm-grey);
+      transition: background 0.25s ease;
+    }
+    .asmt-q-row:last-child { border-bottom: none; }
+    .asmt-q-row:hover { background: rgba(255,255,255,0.7); }
+    .asmt-q-num {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 2.2rem 0 2rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 300;
+      color: var(--warm-grey);
+      border-right: 1px solid var(--warm-grey);
+      line-height: 1;
+      user-select: none;
+    }
+    .asmt-q-text {
+      padding: 2rem;
+      border-right: 1px solid var(--warm-grey);
+    }
+    .asmt-q-cat {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--blue);
+      font-weight: 400;
+      margin-bottom: 0.6rem;
+    }
+    .asmt-q-question {
+      font-size: 0.92rem;
+      font-weight: 300;
+      color: var(--text-dark);
+      line-height: 1.6;
+    }
+    .asmt-q-slider-col {
+      padding: 2rem 2.4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .asmt-slider-val {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.4rem;
+      font-weight: 300;
+      color: var(--navy);
+      line-height: 1;
+      min-width: 2rem;
+      text-align: center;
+      transition: color 0.2s ease;
+      margin-bottom: 0.6rem;
+    }
+    .asmt-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 2px;
+      outline: none;
+      cursor: pointer;
+      background: transparent;
+    }
+    .asmt-slider::-webkit-slider-runnable-track {
+      height: 2px;
+      background: linear-gradient(to right, var(--blue) 0%, var(--blue) var(--pct, 50%), var(--warm-grey) var(--pct, 50%), var(--warm-grey) 100%);
+      border-radius: 1px;
+    }
+    .asmt-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: var(--navy);
+      cursor: pointer;
+      border: 3px solid var(--off-white);
+      box-shadow: 0 0 0 1px var(--navy), 0 2px 6px rgba(31,72,126,0.25);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      margin-top: -9px;
+    }
+    .asmt-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+      box-shadow: 0 0 0 1px var(--blue), 0 3px 10px rgba(55,105,150,0.35);
+    }
+    .asmt-slider::-moz-range-thumb {
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: var(--navy);
+      cursor: pointer;
+      border: 3px solid var(--off-white);
+      box-shadow: 0 0 0 1px var(--navy);
+    }
+    .asmt-slider::-moz-range-track {
+      height: 2px;
+      background: linear-gradient(to right, var(--blue) 0%, var(--blue) var(--pct, 50%), var(--warm-grey) var(--pct, 50%), var(--warm-grey) 100%);
+    }
+    .asmt-pole-labels {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      gap: 1rem;
+    }
+    .asmt-pole-min, .asmt-pole-max {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 300;
+      color: var(--text-mid);
+      line-height: 1.4;
+      max-width: 46%;
+      opacity: 0.7;
+    }
+    .asmt-pole-max { text-align: right; }
+
+    /* Result panel */
+    .asmt-result-panel {
+      background: var(--navy);
+      padding: 3rem 4rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 3rem;
+      align-items: start;
+    }
+    .asmt-result-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(130,156,188,0.7);
+      margin-bottom: 1rem;
+    }
+    .asmt-result-headline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.3rem, 2vw, 1.75rem);
+      font-weight: 300;
+      color: var(--off-white);
+      line-height: 1.3;
+      margin-bottom: 0.8rem;
+      transition: opacity 0.3s ease;
+    }
+    .asmt-result-sub {
+      font-size: 0.88rem;
+      font-weight: 300;
+      color: rgba(244,241,236,0.65);
+      line-height: 1.7;
+      max-width: 480px;
+      margin-bottom: 2rem;
+      min-height: 2.5rem;
+    }
+    .asmt-breakdown {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 2px;
+      background: rgba(130,156,188,0.15);
+      border: 1px solid rgba(130,156,188,0.15);
+      margin-bottom: 1.5rem;
+    }
+    .asmt-bd-cell {
+      background: rgba(29,52,97,0.6);
+      padding: 1.2rem 1rem;
+      text-align: center;
+    }
+    .asmt-bd-cat {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(130,156,188,0.6);
+      margin-bottom: 0.6rem;
+      line-height: 1.4;
+    }
+    .asmt-bd-val {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 300;
+      color: var(--off-white);
+      line-height: 1;
+      transition: color 0.3s ease;
+    }
+    .asmt-result-cta {
+      display: none;
+      align-items: center;
+      gap: 0.7rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--off-white);
+      background: transparent;
+      border: 1px solid rgba(130,156,188,0.5);
+      padding: 0.85rem 1.6rem;
+      text-decoration: none;
+      transition: border-color 0.25s ease, background 0.25s ease;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .asmt-result-cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(98,144,200,0.12);
+      transform: translateX(-100%);
+      transition: transform 0.25s ease;
+    }
+    .asmt-result-cta:hover { border-color: rgba(130,156,188,0.9); color: #fff; }
+    .asmt-result-cta:hover::before { transform: translateX(0); }
+    .asmt-cta-arrow { transition: transform 0.25s ease; }
+    .asmt-result-cta:hover .asmt-cta-arrow { transform: translateX(4px); }
+    .asmt-reset-btn {
+      background: none;
+      border: none;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(244,241,236,0.35);
+      cursor: pointer;
+      padding: 0;
+      transition: color 0.2s ease;
+    }
+    .asmt-reset-btn:hover { color: rgba(244,241,236,0.75); }
+    /* Score arc (right column) */
+    .asmt-result-right { text-align: center; flex-shrink: 0; }
+    .asmt-score-wrap {
+      position: relative;
+      width: 110px; height: 110px;
+      margin: 0 auto 0.8rem;
+    }
+    .asmt-score-svg {
+      width: 110px; height: 110px;
+      transform: rotate(-90deg);
+    }
+    .asmt-score-track { fill: none; stroke: rgba(130,156,188,0.2); stroke-width: 5; }
+    .asmt-score-fill {
+      fill: none;
+      stroke: var(--light);
+      stroke-width: 5;
+      stroke-linecap: round;
+      stroke-dasharray: 283;
+      stroke-dashoffset: 283;
+      transition: stroke-dashoffset 0.5s ease, stroke 0.4s ease;
+    }
+    .asmt-score-num {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .asmt-score-val {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 300;
+      color: #fff;
+      line-height: 1;
+    }
+    .asmt-score-denom {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.58rem;
+      color: rgba(130,156,188,0.6);
+      letter-spacing: 0.1em;
+      margin-top: 2px;
+    }
+    .asmt-band {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--light);
+      transition: color 0.3s ease;
+    }
+    @media (max-width: 900px) {
+      .assessment-section { padding: 4.5rem 2rem; }
+      .asmt-q-row { grid-template-columns: 1.8rem 1fr; }
+      .asmt-q-slider-col {
+        grid-column: 1 / -1;
+        border-top: 1px solid var(--warm-grey);
+        padding: 1.5rem 1.2rem;
+      }
+      .asmt-pole-labels { display: none; }
+      .asmt-result-panel { grid-template-columns: 1fr; padding: 2rem 1.5rem; gap: 2rem; }
+      .asmt-result-right { display: flex; align-items: center; gap: 1.5rem; }
+      .asmt-breakdown { grid-template-columns: repeat(2, 1fr); }
     }
 
     /* Footer */
@@ -896,30 +1214,27 @@
   <section>
     <p class="section-label reveal">The challenge</p>
     <p class="section-intro reveal reveal-delay-1">
-      Most integration failures are not technical failures. They are classification failures that compound silently across every system and acquisition.
+      Most data fragmentation problems are not crises. They are costs that become normal.
     </p>
     <div class="problem-grid">
       <div class="problem-card reveal reveal-delay-1">
-        <div class="problem-card-title">Post-acquisition system chaos</div>
-        <ul>
-          <li>Acquired companies using incompatible classification systems</li>
-          <li>Product catalogs that cannot be reconciled</li>
-          <li>ERPs that will not communicate across entities</li>
-          <li>Duplicate records and conflicting master data</li>
-        </ul>
-        <p class="problem-consequence">Integration delays costing millions. Synergies deferred or lost entirely.</p>
+        <div class="problem-card-title">Your analytics team reconciles before every report</div>
+        <p class="problem-card-body">Cross-system or cross-entity numbers do not match until someone manually harmonizes them. The reconciliation happens every time, by the same people, before the numbers are trusted enough to act on. It is treated as workflow rather than problem.</p>
       </div>
       <div class="problem-card reveal reveal-delay-2">
-        <div class="problem-card-title">Legacy integration debt</div>
-        <ul>
-          <li>Past acquisitions never fully integrated at the data layer</li>
-          <li>Multiple divisions using different supplier taxonomies</li>
-          <li>Siloed analytics that cannot produce a consolidated view</li>
-          <li>AI deployments degrading silently on inconsistent inputs</li>
-        </ul>
-        <p class="problem-consequence">Reporting overhead, analytical blind spots, and AI that underperforms without explanation.</p>
+        <div class="problem-card-title">Your AI projects stall between proof of concept and production</div>
+        <p class="problem-card-body">The demos work. Then the real data arrives, and the model produces inconsistent, unreliable, or confidently wrong outputs. The root cause is classification: the same entity described differently across systems, the same cost code used inconsistently across divisions. The AI is not broken. The foundation beneath it is.</p>
+      </div>
+      <div class="problem-card reveal reveal-delay-1">
+        <div class="problem-card-title">No one can see the full picture on a customer, supplier, or product</div>
+        <p class="problem-card-body">Different systems hold different parts of the record. A customer appears three ways across CRM, finance, and operations. A supplier has four vendor codes. A product category means one thing in procurement and another in reporting. The consolidated view everyone needs exists only as a manual exercise.</p>
+      </div>
+      <div class="problem-card reveal reveal-delay-2">
+        <div class="problem-card-title">New systems inherit old problems</div>
+        <p class="problem-card-body">A CRM migration, a new BI tool, an ERP upgrade: each one starts with a data extraction that reveals the same underlying fragmentation. The new platform cannot fix what the classification layer did not govern. The problem travels.</p>
       </div>
     </div>
+    <p class="problem-closing reveal">These are not symptoms of a bad system. They are symptoms of a classification layer that was never built.</p>
   </section>
 
   <div class="rule"></div>
@@ -1008,6 +1323,132 @@
         </div>
       </div>
       <div class="demo-footer-note">Live AI responses — same model, same question, different data. Caldwell Group is a fictional portfolio company.</div>
+    </div>
+  </section>
+
+  <div class="rule" style="background: linear-gradient(90deg, #376996 0%, #829CBC 40%, transparent 100%); opacity: 0.2; margin: 0 4rem;"></div>
+
+  <!-- Assessment -->
+  <section class="assessment-section">
+    <p class="section-label reveal">Self-assessment</p>
+    <p class="section-intro reveal reveal-delay-1" style="margin-bottom: 3rem;">
+      How governed is your <em>classification layer?</em>
+    </p>
+
+    <div class="asmt-questions reveal reveal-delay-2">
+
+      <div class="asmt-q-row">
+        <div class="asmt-q-num">1</div>
+        <div class="asmt-q-text">
+          <p class="asmt-q-cat">Taxonomy consistency</p>
+          <p class="asmt-q-question">How consistently are your core entities — products, customers, cost centers — classified the same way across systems, business units, and data sources?</p>
+        </div>
+        <div class="asmt-q-slider-col">
+          <div class="asmt-slider-val" id="val-1">3</div>
+          <input type="range" min="1" max="5" value="3" class="asmt-slider" id="slider-1" oninput="updateSlider(1, this.value)">
+          <div class="asmt-pole-labels">
+            <span class="asmt-pole-min">Varies significantly: each system or unit uses its own structure</span>
+            <span class="asmt-pole-max">Fully consistent: one governed classification across all sources</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="asmt-q-row">
+        <div class="asmt-q-num">2</div>
+        <div class="asmt-q-text">
+          <p class="asmt-q-cat">Integration overhead</p>
+          <p class="asmt-q-question">When you acquire a business, onboard a new system, or connect a new data source, how much manual mapping and reconciliation work does your team absorb before the data is usable?</p>
+        </div>
+        <div class="asmt-q-slider-col">
+          <div class="asmt-slider-val" id="val-2">3</div>
+          <input type="range" min="1" max="5" value="3" class="asmt-slider" id="slider-2" oninput="updateSlider(2, this.value)">
+          <div class="asmt-pole-labels">
+            <span class="asmt-pole-min">Significant: every integration requires substantial bespoke work</span>
+            <span class="asmt-pole-max">Minimal: new sources map cleanly to a governed standard</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="asmt-q-row">
+        <div class="asmt-q-num">3</div>
+        <div class="asmt-q-text">
+          <p class="asmt-q-cat">Analytics reliability</p>
+          <p class="asmt-q-question">How much manual reconciliation does your team perform before cross-system or cross-entity analytics outputs are trusted enough to act on?</p>
+        </div>
+        <div class="asmt-q-slider-col">
+          <div class="asmt-slider-val" id="val-3">3</div>
+          <input type="range" min="1" max="5" value="3" class="asmt-slider" id="slider-3" oninput="updateSlider(3, this.value)">
+          <div class="asmt-pole-labels">
+            <span class="asmt-pole-min">Significant reconciliation required before results are usable</span>
+            <span class="asmt-pole-max">Consistently reliable: outputs are trusted without intervention</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="asmt-q-row">
+        <div class="asmt-q-num">4</div>
+        <div class="asmt-q-text">
+          <p class="asmt-q-cat">Analytical depth</p>
+          <p class="asmt-q-question">How granular is your reporting at the cost line, product, and customer level? Can you compare vendor performance in detail, or target product selection, bundling, and customer segments with confidence?</p>
+        </div>
+        <div class="asmt-q-slider-col">
+          <div class="asmt-slider-val" id="val-4">3</div>
+          <input type="range" min="1" max="5" value="3" class="asmt-slider" id="slider-4" oninput="updateSlider(4, this.value)">
+          <div class="asmt-pole-labels">
+            <span class="asmt-pole-min">Reporting is too aggregated to drive commercial decisions</span>
+            <span class="asmt-pole-max">Granular, structured data supports detailed vendor, product, and segment analysis</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="asmt-q-row" style="border-bottom: none;">
+        <div class="asmt-q-num">5</div>
+        <div class="asmt-q-text">
+          <p class="asmt-q-cat">AI readiness</p>
+          <p class="asmt-q-question">How confident are you that the classification layer beneath your AI or analytics initiatives is governed well enough to produce reliable, auditable outputs at scale?</p>
+        </div>
+        <div class="asmt-q-slider-col">
+          <div class="asmt-slider-val" id="val-5">3</div>
+          <input type="range" min="1" max="5" value="3" class="asmt-slider" id="slider-5" oninput="updateSlider(5, this.value)">
+          <div class="asmt-pole-labels">
+            <span class="asmt-pole-min">Not yet governed: AI is building on an unstructured base</span>
+            <span class="asmt-pole-max">Fully governed: the classification layer is production-ready for AI</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="asmt-result-panel reveal reveal-delay-3">
+      <div class="asmt-result-left">
+        <p class="asmt-result-label">Readiness indicator</p>
+        <p class="asmt-result-headline" id="result-headline">Move the sliders to generate your assessment.</p>
+        <p class="asmt-result-sub" id="result-sub"></p>
+        <div class="asmt-breakdown">
+          <div class="asmt-bd-cell"><div class="asmt-bd-cat">Taxonomy consistency</div><div class="asmt-bd-val" id="bd-1">3</div></div>
+          <div class="asmt-bd-cell"><div class="asmt-bd-cat">Integration overhead</div><div class="asmt-bd-val" id="bd-2">3</div></div>
+          <div class="asmt-bd-cell"><div class="asmt-bd-cat">Analytics reliability</div><div class="asmt-bd-val" id="bd-3">3</div></div>
+          <div class="asmt-bd-cell"><div class="asmt-bd-cat">Analytical depth</div><div class="asmt-bd-val" id="bd-4">3</div></div>
+          <div class="asmt-bd-cell"><div class="asmt-bd-cat">AI readiness</div><div class="asmt-bd-val" id="bd-5">3</div></div>
+        </div>
+        <a href="mailto:info@hypericum.io" class="asmt-result-cta" id="result-cta">
+          Discuss your results <span class="asmt-cta-arrow">&#8594;</span>
+        </a>
+        <button class="asmt-reset-btn" onclick="resetAssessment()">Reset</button>
+      </div>
+      <div class="asmt-result-right">
+        <div class="asmt-score-wrap">
+          <svg class="asmt-score-svg" viewBox="0 0 110 110">
+            <circle class="asmt-score-track" cx="55" cy="55" r="45"></circle>
+            <circle class="asmt-score-fill" id="score-arc" cx="55" cy="55" r="45"></circle>
+          </svg>
+          <div class="asmt-score-num">
+            <span class="asmt-score-val" id="score-display">15</span>
+            <span class="asmt-score-denom">/ 25</span>
+          </div>
+        </div>
+        <div class="asmt-band" id="result-band">Assessing...</div>
+      </div>
     </div>
   </section>
 
@@ -1124,7 +1565,7 @@
           </div>
           <div class="form-group">
             <label for="company">Company</label>
-            <input type="text" id="company" name="company" required placeholder="Organisation name" />
+            <input type="text" id="company" name="company" required placeholder="Organization name" />
           </div>
           <div class="form-group">
             <label for="message">Tell us about your data challenge</label>
@@ -1145,7 +1586,7 @@
       <span class="footer-legal">&copy; 2026 All rights reserved.</span>
     </div>
     <div class="footer-right">
-      <a href="mailto:info@hypericum.io">info@hypericum.io</a>
+       <a href="mailto:info@hypericum.io">info@hypericum.io</a>
     </div>
   </footer>
 
@@ -1176,6 +1617,12 @@
     const PROXY_BASE  = 'https://website-live-demo-production.up.railway.app';
     const DEMO_SECRET = '9f3c7a1d6b8e4c2f0a5d9e7b3c1f8a6e2d4b7c9f0a1e3d5c';
 
+    const CHART_TITLES = {
+      q1: { good: 'Cloud Spend by Provider — Harmonized (FY, GBP)', bad: 'Cloud Spend Attempt — Conflicting Sources' },
+      q2: { good: 'Risk Exposure by Division (%) — Harmonized',     bad: 'Risk Exposure — Partial Data (%)' },
+      q3: { good: 'Segment Score by Promotion Fit — Harmonized',    bad: 'Segment Estimate — Unstructured Data' }
+    };
+
     async function callDemoEndpoint(qKey, side) {
       const response = await fetch(`${PROXY_BASE}/api/demo/${qKey}/${side}`, {
         method: 'POST',
@@ -1192,28 +1639,38 @@
       const rows = [];
       let match;
       while ((match = re.exec(text)) !== null) {
-        const [label, value, max] = match[1].split('|');
-        rows.push({ label, value: parseFloat(value), max: parseFloat(max || 100) });
+        const parts = match[1].split('|');
+        const label = parts[0];
+        const value = parseFloat(parts[1]);
+        const max   = parseFloat(parts[2] || 100);
+        const unit  = (parts[3] || '').trim().toLowerCase();
+        if (!isNaN(value) && !isNaN(max)) rows.push({ label, value, max, unit });
       }
       return { rows, cleaned: text.replace(re, '').replace(/\n{3,}/g, '\n\n').trim() };
     }
 
-    function buildDemoChartHTML(rows, isGood) {
+    function formatDemoValue(value, unit) {
+      return unit === '%' ? `${value}%` : `£${value.toLocaleString()}`;
+    }
+
+    function buildDemoChartHTML(rows, isGood, qKey) {
       if (!rows.length) return '';
+      const side  = isGood ? 'good' : 'bad';
+      const title = (CHART_TITLES[qKey] && CHART_TITLES[qKey][side]) || '';
       return `<div class="demo-chart">
-        <div class="demo-chart-title">${isGood ? 'Cloud spend by provider — harmonized (FY, GBP)' : 'Cloud spend attempt — conflicting sources'}</div>
+        <div class="demo-chart-title">${title}</div>
         ${rows.map(r => {
           const pct = Math.round((r.value / r.max) * 100);
           return `<div class="demo-bar-row">
             <div class="demo-bar-label${isGood ? '' : ' demo-bar-label-bad'}">${r.label}</div>
             <div class="demo-bar-track"><div class="demo-bar-fill ${isGood ? 'demo-bar-fill-good' : 'demo-bar-fill-bad'}" style="width:${pct}%"></div></div>
-            <div class="demo-bar-value">£${r.value.toLocaleString()}</div>
+            <div class="demo-bar-value">${formatDemoValue(r.value, r.unit)}</div>
           </div>`;
         }).join('')}
       </div>`;
     }
 
-    function formatDemoResponse(text, isGood) {
+    function formatDemoResponse(text, isGood, qKey) {
       const { rows, cleaned } = renderDemoChart(text);
       const bodyHTML = cleaned
         .split('\n\n')
@@ -1225,7 +1682,7 @@
           return `<p>${para.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/_(.*?)_/g, '<em>$1</em>')}</p>`;
         })
         .join('');
-      return `<div class="demo-response">${buildDemoChartHTML(rows, isGood)}${bodyHTML}</div>`;
+      return `<div class="demo-response">${buildDemoChartHTML(rows, isGood, qKey)}${bodyHTML}</div>`;
     }
 
     const DEMO_Q_KEYS = ['q1', 'q2', 'q3'];
@@ -1245,13 +1702,83 @@
         callDemoEndpoint(qKey, 'bad'),
         callDemoEndpoint(qKey, 'good')
       ]);
-      badPanel.innerHTML  = badResult.status  === 'fulfilled' ? formatDemoResponse(badResult.value,  false) : `<div class="demo-error">Error: ${badResult.reason.message}</div>`;
-      goodPanel.innerHTML = goodResult.status === 'fulfilled' ? formatDemoResponse(goodResult.value, true)  : `<div class="demo-error">Error: ${goodResult.reason.message}</div>`;
+      badPanel.innerHTML  = badResult.status  === 'fulfilled' ? formatDemoResponse(badResult.value,  false, qKey) : `<div class="demo-error">Error: ${badResult.reason.message}</div>`;
+      goodPanel.innerHTML = goodResult.status === 'fulfilled' ? formatDemoResponse(goodResult.value, true,  qKey) : `<div class="demo-error">Error: ${goodResult.reason.message}</div>`;
       btns.forEach(b => b.disabled = false);
       demoRunning = false;
     }
 
-    // ── Scroll reveal ───────────────────────────────────────
+    // ── Assessment ─────────────────────────────────────────
+    const asmValues = { 1: 3, 2: 3, 3: 3, 4: 3, 5: 3 };
+    let asmInteracted = false;
+
+    const asmBands = [
+      { min: 5,  max: 9,  band: 'Significant opportunity',  headline: 'The classification layer has not yet been brought under governance.', sub: 'This is the most impactful point at which to act.' },
+      { min: 10, max: 15, band: 'Governance gaps present',   headline: 'Meaningful gaps remain.', sub: 'These are likely surfacing as integration friction, reconciliation overhead, or constraints on what your analytics and AI can deliver.' },
+      { min: 16, max: 20, band: 'Baseline established',      headline: 'A reasonable baseline, but a significant share of your data is not yet structured for the decisions that matter most.', sub: 'Pricing, vendor negotiation, competitive reporting, AI at scale: the gap between organized data and governed data is where margin and revenue are being left behind.' },
+      { min: 21, max: 25, band: 'Well governed',             headline: 'The classification infrastructure is in place. The opportunity now is leverage.', sub: 'A governed semantic core unlocks pricing intelligence, vendor benchmarking, segmentation, and AI capabilities that consistent-but-ungoverned data cannot reach.' }
+    ];
+
+    function asmGetTotal() { return Object.values(asmValues).reduce((a, b) => a + b, 0); }
+
+    function asmUpdateArc(total) {
+      const arc = document.getElementById('score-arc');
+      const pct = (total - 5) / 20;
+      arc.style.strokeDashoffset = 283 - pct * 283;
+      if (total <= 9) arc.style.stroke = '#6290C8';
+      else if (total <= 15) arc.style.stroke = '#829CBC';
+      else if (total <= 20) arc.style.stroke = '#376996';
+      else arc.style.stroke = '#1F487E';
+    }
+
+    function asmUpdateResult(total) {
+      const band = asmBands.find(b => total >= b.min && total <= b.max);
+      if (!band) return;
+      document.getElementById('score-display').textContent = total;
+      document.getElementById('result-band').textContent = band.band;
+      document.getElementById('result-headline').textContent = band.headline;
+      document.getElementById('result-sub').textContent = band.sub;
+      asmUpdateArc(total);
+      if (asmInteracted) document.getElementById('result-cta').style.display = 'inline-flex';
+    }
+
+    function updateSlider(id, val) {
+      asmInteracted = true;
+      asmValues[id] = parseInt(val);
+      const pct = ((val - 1) / 4) * 100;
+      document.getElementById('slider-' + id).style.setProperty('--pct', pct + '%');
+      // Large serif value display
+      const valEl = document.getElementById('val-' + id);
+      valEl.textContent = val;
+      valEl.style.color = val <= 2 ? 'var(--light)' : val == 3 ? 'var(--mid)' : 'var(--navy)';
+      // Breakdown cell value
+      const bdEl = document.getElementById('bd-' + id);
+      bdEl.textContent = val;
+      bdEl.style.color = val <= 2 ? 'var(--light)' : val == 3 ? 'rgba(244,241,236,0.7)' : '#fff';
+      asmUpdateResult(asmGetTotal());
+    }
+
+    function resetAssessment() {
+      asmInteracted = false;
+      document.getElementById('result-cta').style.display = 'none';
+      for (let i = 1; i <= 5; i++) {
+        document.getElementById('slider-' + i).value = 3;
+        updateSlider(i, 3);
+      }
+      asmInteracted = false;
+      document.getElementById('result-cta').style.display = 'none';
+      document.getElementById('result-headline').textContent = 'Move the sliders to generate your assessment.';
+      document.getElementById('result-sub').textContent = '';
+      document.getElementById('result-band').textContent = 'Assessing...';
+      const arc = document.getElementById('score-arc');
+      arc.style.strokeDashoffset = 283;
+      arc.style.stroke = 'var(--light)';
+    }
+
+    // Initialize slider track fill
+    for (let i = 1; i <= 5; i++) {
+      document.getElementById('slider-' + i).style.setProperty('--pct', '50%');
+    }
     const reveals = document.querySelectorAll('.reveal');
     reveals.forEach(el => el.classList.add('hidden'));
     const observer = new IntersectionObserver((entries) => {
