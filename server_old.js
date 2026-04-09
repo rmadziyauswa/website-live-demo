@@ -99,12 +99,9 @@ Of which: AWS 73.5% | Azure 23.0% | GCP 3.2% | Allocated 3.5%
 
 Notes: All figures reconciled to finance system cost codes. SaaS licensing separated from IaaS/PaaS. On-premise excluded. Annualised from Q3 actuals where full-year not available.`;
 
-const CHART_INSTRUCTION     = 'Use charts and visuals where possible, and use the [CHART:label|value|max] format for any chart or visual. Do not use markdown tables or ASCII formatting.';
-const CHART_INSTRUCTION_Q2  = 'If producing a chart, use percentage values only. Suitable chart data includes EBITDA margin, customer concentration, or contract renewal exposure by division. Do not chart ratios, leverage multiples, or categorical risk ratings. Use the [CHART:label|value|max] format for any chart or visual. Do not use markdown tables or ASCII formatting.';
+const CHART_INSTRUCTION = 'Use charts and visuals where possible, and use the [CHART:label|value|max] format for any chart or visual. Do not use markdown tables or ASCII formatting.';
 const SHARED_BAD_INSTRUCTION  = `Work only with what is available. Do not comment on data quality, gaps, or limitations. Give the best answer the data supports. Do not offer follow-up options, suggestions, or next steps. End your response after answering the question. ${CHART_INSTRUCTION} Keep response under 200 words.`;
 const SHARED_GOOD_INSTRUCTION = `Do not offer follow-up options, suggestions, or next steps. End your response after answering the question. ${CHART_INSTRUCTION} Keep response under 200 words.`;
-const SHARED_BAD_INSTRUCTION_Q2  = `Work only with what is available. Do not comment on data quality, gaps, or limitations. Give the best answer the data supports. Do not offer follow-up options, suggestions, or next steps. End your response after answering the question. ${CHART_INSTRUCTION_Q2} Keep response under 200 words.`;
-const SHARED_GOOD_INSTRUCTION_Q2 = `Do not offer follow-up options, suggestions, or next steps. End your response after answering the question. ${CHART_INSTRUCTION_Q2} Keep response under 200 words.`;
 
 const QUESTIONS = {
   q1: {
@@ -127,7 +124,7 @@ TECH SERVICES: EBITDA margin: 14.2%. Revenue: £8.4m. "Customer concentration ri
 CATERING: Gross margin: "around 22% usually". Key risk field: blank.
 Group EBITDA: unknown (no consolidated P&L available — divisions use different accounting treatments)
 Debt: "circa £12m net debt" (source: last board pack, Q2, may be stale)`,
-      user: `What is our key financial risk? ${SHARED_BAD_INSTRUCTION_Q2}`
+      user: `What is our key financial risk? ${SHARED_BAD_INSTRUCTION}`
     },
     good: {
       system: GOOD_BASE + `
@@ -147,7 +144,7 @@ Key risk flags (canonical taxonomy applied):
 - Refinancing: MEDIUM (3.1x leverage, covenant threshold 3.5x)
 - Contract renewal: HIGH (Tech Services — 47% revenue up for renewal in 12 months)
 - Margin compression: MEDIUM (Catering margin 9.1%, below group threshold of 12%)`,
-      user: `What is our key financial risk? Identify the most significant risk with specific evidence. Be precise and actionable. ${SHARED_GOOD_INSTRUCTION_Q2}`
+      user: `What is our key financial risk? Identify the most significant risk with specific evidence. Be precise and actionable. ${SHARED_GOOD_INSTRUCTION}`
     }
   },
   q3: {
